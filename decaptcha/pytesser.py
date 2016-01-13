@@ -6,10 +6,9 @@ V 0.0.1, 3/10/07"""
 
 import os
 import subprocess
-
 from PIL import Image
 
-from utility.decaptcha import util
+from decaptcha import util
 import errors
 import settings
 
@@ -18,6 +17,7 @@ scratch_image_name = "temp.png" # This file must be .bmp or other Tesseract-comp
 scratch_text_name_root = "temp" # Leave out the .txt extension
 scratch_charset = 'charset'
 cleanup_scratch_flag = True  # Temporary files cleaned up after OCR operation
+
 
 def call_tesseract(input_filename, output_filename, charset=None):
     """Calls external tesseract on input file (restrictions on types),
@@ -36,6 +36,7 @@ def call_tesseract(input_filename, output_filename, charset=None):
     if retcode != 0:
         errors.check_for_errors()
 
+
 def image_to_string(im, cleanup=cleanup_scratch_flag, charset=None):
     """Converts im to file, applies tesseract, and fetches resulting text.
     If cleanup=True, delete scratch files after operation."""
@@ -47,6 +48,7 @@ def image_to_string(im, cleanup=cleanup_scratch_flag, charset=None):
         if cleanup:
             util.perform_cleanup(scratch_image_name, scratch_text_name_root, scratch_charset)
     return text
+
 
 def image_file_to_string(filename, cleanup=cleanup_scratch_flag, graceful_errors=True, charset=None):
     """Applies tesseract to filename; or, if image is incompatible and graceful_errors=True,

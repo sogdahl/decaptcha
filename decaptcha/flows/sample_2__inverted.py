@@ -1,6 +1,6 @@
 __author__ = 'Steven Ogdahl'
 
-from utility.decaptcha import processing
+from decaptcha import processing
 
 steps = [
     ['invert'],

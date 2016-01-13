@@ -15,8 +15,10 @@ PALETTE_IMAGE.putpalette(PALETTE)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
+
 def _rgb_to_hsv(r, g, b):
     return colorsys.rgb_to_hsv(r / 255.0, g / 255.0, b / 255.0)
+
 
 def _invert_color(color):
     if isinstance(color, tuple):
@@ -196,23 +198,24 @@ def stitch_orthogonal_gaps(im, color=BLACK, gapsize=1, threshold=0.5):
             pixel = im.getpixel((x, y))
             if _color_diff(pixel, color) > threshold:
                 continue
-            if x >= 2: # Check left
+            if x >= 2:  # Check left
                 if _color_diff(pixel, im.getpixel((x - 1, y))) > threshold and \
                                 _color_diff(pixel, im.getpixel((x - 2, y))) < threshold:
                     im_copy.putpixel((x - 1, y), pixel)
-            if y >= 2: # Check up
+            if y >= 2:  # Check up
                 if _color_diff(pixel, im.getpixel((x, y - 1))) > threshold and \
                                 _color_diff(pixel, im.getpixel((x, y - 2))) < threshold:
                     im_copy.putpixel((x, y - 1), pixel)
-            if x <= im.size[0] - 3: # Check right
+            if x <= im.size[0] - 3:  # Check right
                 if _color_diff(pixel, im.getpixel((x + 1, y))) > threshold and \
                                 _color_diff(pixel, im.getpixel((x + 2, y))) < threshold:
                     im_copy.putpixel((x + 1, y), pixel)
-            if y <= im.size[1] - 3: # Check down
+            if y <= im.size[1] - 3:  # Check down
                 if _color_diff(pixel, im.getpixel((x, y + 1))) > threshold and \
                                 _color_diff(pixel, im.getpixel((x, y + 2))) < threshold:
                     im_copy.putpixel((x, y + 1), pixel)
     return im_copy
+
 
 def stitch_kissing_corners(im, color=BLACK, threshold=0.5):
     im_copy = im.copy()
@@ -255,6 +258,7 @@ def stitch_kissing_corners(im, color=BLACK, threshold=0.5):
                 im_copy.putpixel((x, y + 1), pixel)
     return im_copy
 
+
 def remove_lonely(im, max_neighbors=0, threshold=0.5, color=None):
     im_copy = im.copy()
     draw = ImageDraw.Draw(im_copy)
@@ -270,13 +274,14 @@ def remove_lonely(im, max_neighbors=0, threshold=0.5, color=None):
                     neighbor = (x + x_i, y + y_i)
                     if (x + x_i, y + y_i) == (x, y):
                         continue
-                    if neighbor[0] >= 0 and neighbor[0] < im.size[0] and neighbor[1] >= 0 and neighbor[1] < im.size[1]:
+                    if 0 <= neighbor[0] < im.size[0] and 0 <= neighbor[1] < im.size[1]:
                         if _color_diff(pixel, im.getpixel(neighbor)) < threshold:
                             neighbors.append(neighbor)
             if len(neighbors) <= max_neighbors:
                 draw.point((x, y), fill=_invert_color(pixel))
 
     return im_copy
+
 
 def remove_juts(im, color=BLACK, threshold=0.5):
     im_copy = im.copy()
@@ -328,8 +333,10 @@ def remove_juts(im, color=BLACK, threshold=0.5):
 
     return im_copy
 
+
 def invert(im):
     return ImageOps.invert(im)
+
 
 def threshold(im, threshold=0.5):
     im_copy = im.copy()
@@ -341,13 +348,13 @@ def threshold(im, threshold=0.5):
                 im_copy.putpixel((x, y), BLACK)
     return im_copy
 
+
 def fill_shapes(im, fill_holes=False, separation=5, edge_depth=2, minimum_size=15):
     im_copy = im.copy()
     used_hues = set()
     color_histogram = {}
     color_extent = {}
     edge_colors = set()
-    points_checked = set()
 
     draw = ImageDraw.Draw(im_copy)
 

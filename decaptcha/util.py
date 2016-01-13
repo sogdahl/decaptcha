@@ -3,9 +3,11 @@ __author__ = 'Steven Ogdahl'
 
 import os
 
+
 def image_to_scratch(im, scratch_image_name):
     """Saves image in memory to scratch file.  .bmp format will be read correctly by Tesseract"""
     im.save(scratch_image_name, dpi=(200,200))
+
 
 def charset_to_scratch(charset, scratch_charset):
     c = file(scratch_charset, 'w')
@@ -13,11 +15,13 @@ def charset_to_scratch(charset, scratch_charset):
     c.flush()
     c.close()
 
-def	retrieve_text(scratch_text_name_root):
+
+def retrieve_text(scratch_text_name_root):
     inf = file(scratch_text_name_root + '.txt')
     text = inf.read()
     inf.close()
     return text
+
 
 def perform_cleanup(scratch_image_name, scratch_text_name_root, scratch_charset):
     """Clean up temporary files from disk"""
